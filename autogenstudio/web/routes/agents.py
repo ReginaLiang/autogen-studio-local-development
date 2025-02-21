@@ -1,10 +1,11 @@
 from typing import Dict
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 
 from database import DatabaseManager  # Add this import
 from datamodel import Agent
 from ..deps import get_db
+from utils.utils import verify_token
 
 router = APIRouter()
 
@@ -26,8 +27,11 @@ async def get_agent(agent_id: int, user_id: str, db: DatabaseManager = Depends(g
 
 
 @router.post("/")
-async def create_agent(agent: Agent, db: DatabaseManager = Depends(get_db)) -> Dict:
+async def create_agent(request: Request, agent: Agent, db: DatabaseManager = Depends(get_db)) -> Dict:
     """Create a new agent"""
+    authorization: str = request.headers.get("Authorization")
+    user_id = verify_token(authorization)
+    print("user_id", user_id)
     response = db.upsert(agent)
     if not response.status:
         raise HTTPException(status_code=400, detail=response.message)

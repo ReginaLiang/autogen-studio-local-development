@@ -10,8 +10,32 @@ from typing import Any, Dict, List, Tuple, Union
 from dotenv import load_dotenv
 from loguru import logger
 
-from ..datamodel import Model
-from ..version import APP_NAME
+# from datamodel import Model
+from version import APP_NAME
+import requests
+
+def verify_token(token: str):
+    url = "https://rest-test.dev.agentweave.ai/user"
+    payload = {
+        "request_type": "verify_token",
+        "request_data": {
+            "token": token
+        }
+    }
+    
+    response = requests.post(url, json=payload)
+    print("response", response)
+
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            return data
+        except ValueError:
+            print("Error: Response is not in JSON format.")
+            return None
+    else:
+        print(f"Error: Failed to connect. Status code: {response.status_code}")
+        return None
 
 
 def sha256_hash(text: str) -> str:
@@ -241,16 +265,16 @@ def init_app_folders(app_file_path: str) -> Dict[str, str]:
     return folders
 
 
-def sanitize_model(model: Model):
-    """
-    Sanitize model dictionary to remove None values and empty strings and only keep valid keys.
-    """
-    if isinstance(model, Model):
-        model = model.model_dump()
-    valid_keys = ["model", "base_url", "api_key", "api_type", "api_version"]
-    # only add key if value is not None
-    sanitized_model = {k: v for k, v in model.items() if (v is not None and v != "") and k in valid_keys}
-    return sanitized_model
+# def sanitize_model(model: Model):
+#     """
+#     Sanitize model dictionary to remove None values and empty strings and only keep valid keys.
+#     """
+#     if isinstance(model, Model):
+#         model = model.model_dump()
+#     valid_keys = ["model", "base_url", "api_key", "api_type", "api_version"]
+#     # only add key if value is not None
+#     sanitized_model = {k: v for k, v in model.items() if (v is not None and v != "") and k in valid_keys}
+#     return sanitized_model
 
 
 class Version:
