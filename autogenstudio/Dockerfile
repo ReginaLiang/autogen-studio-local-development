@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8081
 
 # Command to run the application
-CMD ["uvicorn", "web.app:app", "--reload", "--host", "0.0.0.0", "--port", "8081"]
+CMD ["uvicorn", "web.app:app", "--reload", "--host", "0.0.0.0", "--port", "8081", "--log-level", "info"]

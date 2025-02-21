@@ -2,8 +2,8 @@ from typing import Dict
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from ...database import DatabaseManager  # Add this import
-from ...datamodel import Agent, Model, Tool
+from database import DatabaseManager  # Add this import
+from datamodel import Agent
 from ..deps import get_db
 
 router = APIRouter()

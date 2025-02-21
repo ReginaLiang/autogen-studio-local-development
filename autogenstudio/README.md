@@ -1,6 +1,10 @@
+```
+pip install -r 
+```
+
 ## 本地调试：
 ```
-uvicorn web.app:app --reload --port 8081
+uvicorn web.app:app --reload --port 8081 --log-level debug
 ```
 
 ## docker 部署

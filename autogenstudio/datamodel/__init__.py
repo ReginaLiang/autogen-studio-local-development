@@ -1,4 +1,4 @@
-from .db import Message, Run, RunStatus, Session, Team
+from .db import Message, Run, RunStatus, Session, Team, Agent
 from .types import (
     Gallery,
     GalleryComponents,
@@ -13,6 +13,7 @@ from .types import (
 )
 
 __all__ = [
+    "Agent",
     "Team",
     "Run",
     "RunStatus",

@@ -11,6 +11,29 @@ from sqlmodel import JSON, Column, DateTime, Field, SQLModel, func
 
 from .types import MessageConfig, MessageMeta, TeamResult
 
+class Agent(SQLModel, table=True):
+    __table_args__ = {"sqlite_autoincrement": True}
+    
+    # Auto-incremented ID field
+    id: Optional[int] = Field(default=None, primary_key=True)
+
+    # Timestamps with default values
+    created_at: datetime = Field(
+        default_factory=datetime.now,
+        sa_column=Column(DateTime(timezone=True), server_default=func.now())
+    )  # pylint: disable=not-callable
+    
+    updated_at: datetime = Field(
+        default_factory=datetime.now,
+        sa_column=Column(DateTime(timezone=True), onupdate=func.now())
+    )  # pylint: disable=not-callable
+
+    # Other fields
+    user_id: Optional[str] = None
+    version: Optional[str] = "0.0.1"
+    type: Optional[str] = None
+    config: Optional[dict] = Field(sa_column=Column(JSON, nullable=True))
+    task_instruction: Optional[str] = None
 
 class Team(SQLModel, table=True):
     __table_args__ = {"sqlite_autoincrement": True}
